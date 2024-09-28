@@ -1,7 +1,8 @@
 extends Node2D
 
-@export var board_width = 6
-@export var board_height = 6
+@export var board_width = 8
+@export var board_height = 8
+@export var phase = 0
 
 var scene_cell = preload("res://cell.tscn")
 var cell_color_orange: Color = "db9661"
@@ -17,14 +18,28 @@ func _ready() -> void:
 		for j in range(board_height):
 			var cell = scene_cell.instantiate()
 			cell.position = Vector2(cell_pos_x, cell_pos_y)
+			if (randi() % 2 == 0):
+				cell.is_head = false
 			if ((i % 2 == 0 and j % 2 == 0) or (i % 2 == 1 and j % 2 == 1)):
 				cell.cell_color = cell_color_orange
 			else:
 				cell.cell_color = cell_color_brown
+			cell.key_put.connect(_on_cell_key_put)
 			add_child(cell)
 			cell_pos_x += cell_size
 		cell_pos_y += cell_size
-	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	print(get_board_info())
+	print(get_board_info().size())
+
+func get_board_info() -> Array:
+	var result = []
+	for cell in get_children():
+		result.push_back(cell.is_head)
+	return result
+
+func set_phase(set_to: int) -> void:
+	for cell in get_children():
+		cell.set_phase(set_to)
+
+func _on_cell_key_put(cell):
+	print("key!")

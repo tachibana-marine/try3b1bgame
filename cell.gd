@@ -1,7 +1,11 @@
 extends Node2D
 
+signal key_put
+
 @export var is_head: bool = true
 @export var cell_color: Color = "db9661"
+@export var has_key: bool = false
+@export var phase: int = 0
 
 var sprite_tail = load("res://asset/tail.png")
 var sprite_head = load("res://asset/head.png")
@@ -25,11 +29,21 @@ func set_is_head(set_to: bool) -> void:
 	is_head = set_to
 	_set_sprite()
 	
+func set_has_key(set_to: bool):
+	has_key = set_to
+
+func set_phase(set_to: int):
+	phase = set_to
 
 func flip() -> void:
 	set_is_head(!is_head)
 
-func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			flip()
+			if (phase == 0):
+				flip()
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			if (phase == 0):
+				set_has_key(true)
+				key_put.emit(self)

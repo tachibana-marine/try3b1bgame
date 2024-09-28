@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3 uid="uid://ddvgko1av020q"]
+
+[ext_resource type="PackedScene" uid="uid://cttau0ginkmvm" path="res://board.tscn" id="1_bnje1"]
+
+[node name="Node" type="Node"]
+
+[node name="board" parent="." instance=ExtResource("1_bnje1")]
+
+[node name="Label" type="Label" parent="."]
+offset_left = 800.0
+offset_top = 20.0
+offset_right = 848.0
+offset_bottom = 43.0
+theme_override_font_sizes/font_size = 32
+text = "Step 1: Hide the Key."
+
+[node name="Label2" type="Label" parent="."]
+offset_left = 800.0
+offset_top = 104.0
+offset_right = 1200.0
+offset_bottom = 304.0
+theme_override_font_sizes/font_size = 32
+text = "Step 2: A coin is flipped. The coin to flip is decided by the algorithm described in the video."
+autowrap_mode = 2
+
+[node name="Label3" type="Label" parent="."]
+offset_left = 800.0
+offset_top = 336.0
+offset_right = 1200.0
+offset_bottom = 536.0
+theme_override_font_sizes/font_size = 32
+text = "Step 3: Guess where the key is."
+autowrap_mode = 2
+
+[node name="InputHint" type="Label" parent="."]
+offset_left = 800.0
+offset_top = 528.0
+offset_right = 1200.0
+offset_bottom = 728.0
+theme_override_font_sizes/font_size = 32
+text = "Left Click: Flip Coin
+Right Click: Hide key
+Space: Activate Step2"
+autowrap_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = 808.0
+offset_top = 704.0
+offset_right = 1208.0
+offset_bottom = 768.0
+bbcode_enabled = true
+text = "[url]https://youtu.be/as7Gkm7Y7h4?si=-K9X2urMUoBQts3G[/url]"
