@@ -1,9 +1,13 @@
 extends Node2D
 
+signal coin_flipped
+signal key_put
+signal guess_made
+
 @export var board_width = 8
 @export var board_height = 8
-@export var phase = 0
 
+var phase = 0
 var scene_cell = preload("res://cell.tscn")
 var cell_color_orange: Color = "db9661"
 var cell_color_brown: Color = "704421"
@@ -25,6 +29,8 @@ func _ready() -> void:
 			else:
 				cell.cell_color = cell_color_brown
 			cell.key_put.connect(_on_cell_key_put)
+			cell.coin_flipped.connect(_on_cell_coin_flipped)
+			cell.guess_made.connect(_on_cell_guess_made)
 			add_child(cell)
 			cell_pos_x += cell_size
 		cell_pos_y += cell_size
@@ -42,4 +48,13 @@ func set_phase(set_to: int) -> void:
 		cell.set_phase(set_to)
 
 func _on_cell_key_put(cell):
-	print("key!")
+	for tmp_cell in get_children():
+		if (tmp_cell != cell):
+			tmp_cell.set_has_key(false)
+	key_put.emit(cell)
+
+func _on_cell_coin_flipped(cell):
+	coin_flipped.emit(cell)
+
+func _on_cell_guess_made(cell):
+	guess_made.emit(cell)
