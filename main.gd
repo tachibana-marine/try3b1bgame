@@ -12,25 +12,52 @@ func set_phase(set_to: int):
 	$board.set_phase(set_to)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if (Input.is_action_just_pressed("flip_by_algorithm")):
-		do_the_math()
+		if (phase == 1):
+			do_the_math()
+			_phase2_to_phase3()
+		elif (phase == 2):
+			$ParityLabel.text = str(calc_parity())
 
-func do_the_math():
+func calc_parity() -> Array:
 	var board_info = $board.get_board_info()
 	var parity = [false, false, false, false, false, false]
-
 	for i in board_info.size():
 		for j in range(6):
 			if (i & int(pow(2, j)) > 0):
 				parity[j] = parity[j] != board_info[i]
-	var parity_in_int = 0
+	return parity
+
+func do_the_math():
+	var parity = calc_parity()
+	var key_pos_bin = int_to_bin($board.get_key_pos())
+	var flip_pos_bin = [false, false, false, false, false, false]
 	for i in range(6):
-		if (parity[i]):
-			parity_in_int += pow(2, i)
+		if (key_pos_bin[i] != parity[i]):
+			flip_pos_bin[i] = true
+	$board.flip(bin_to_int(flip_pos_bin))
+
+
+func bin_to_int(arr: Array) -> int:
+	var result = 0
+	for i in range(6):
+		if (arr[i]):
+			result += pow(2, i)
+	return result
+
+func int_to_bin(num: int) -> Array:
+	var result = [false, false, false, false, false, false]
+
+	if (num > 63):
+		return result
+	for i in result.size():
+		if (num & 1 == 1):
+			result[i] = true
+		num >>= 1
 		
-	
-	print(parity, parity_in_int)
+	return result
+
 
 func _on_board_key_put(cell) -> void:
 	_phase1_to_phase2()
@@ -62,6 +89,7 @@ func _phase2_to_phase3() -> void:
 	$Label3.show()
 	$InputHint2.hide()
 	$InputHint3.show()
+	do_the_math()
 
 func _back_to_phase1() -> void:
 	set_phase(0)

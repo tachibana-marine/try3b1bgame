@@ -43,6 +43,18 @@ func get_board_info() -> Array:
 		result.push_back(cell.is_head)
 	return result
 
+func get_key_pos() -> int:
+	var i = 0
+	for cell in get_children():
+		if (cell.has_key):
+			return i
+		i += 1
+	return -1
+
+func flip(pos: int) -> void:
+	get_children()[pos].flip()
+		
+
 func set_phase(set_to: int) -> void:
 	for cell in get_children():
 		cell.set_phase(set_to)
